@@ -37,8 +37,11 @@ const registerController = async (req, res) => {
     }
 }
 
+// login controller call back
 const loginController = async (req, res) => {
     try {
+
+        // try finding the user
         const user = await userModel.findOne({ email: req.body.email });
         if (!user) {
             return res.status(404).send({
@@ -47,6 +50,7 @@ const loginController = async (req, res) => {
             });
         }
 
+        // compare the password with DB
         const comparePassword = await bcrypt.compare(req.body.password, user.password);
         if (!comparePassword) {
             return res.status(401).send({
@@ -55,6 +59,7 @@ const loginController = async (req, res) => {
             });
         }
 
+        // generate token
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         return res.status(200).send({
             message: 'User Logged In Successfully',
@@ -71,4 +76,21 @@ const loginController = async (req, res) => {
     }
 };
 
-module.exports = { registerController, loginController }
+const currentUserController = async (req,res) => {
+    try {
+        const user = await userModel.findOne({_id:req.body.userId})
+        return res.status(200).send({
+            success:true,
+            message:"User fetched succesfully",
+            user
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            success:false,
+            message:"Unable to get user",
+            error
+        })
+    }
+}
+module.exports = { registerController, loginController, currentUserController }
