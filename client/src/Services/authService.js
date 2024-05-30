@@ -24,6 +24,19 @@ export const handleRegister = (
 ) => {
   e.preventDefault();
   try {
+    if (
+      !email ||
+      !password ||
+      !role ||
+      !name ||
+      !organizationName ||
+      !hospitalName ||
+      !website ||
+      !address ||
+      !phone
+    ) {
+      return alert("Please fill all the fields");
+    }
     console.log(
       "Register",
       e,
