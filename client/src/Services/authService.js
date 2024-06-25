@@ -3,7 +3,7 @@
 // This function is used to create an action that will be dispatched by the Redux Toolkit. It takes three arguments:
 // The name of the action to be dispatched. The name of the action is used to generate the action type. The name of the action is used to generate the action name and the action.
 
-import { userLogin } from "../Redux/features/auth/authAction";
+import { userLogin, userRegister } from "../Redux/features/auth/authAction";
 import store from "../Redux/store";
 
 export const handleLogin = (e, email, password, role) => {
@@ -13,7 +13,7 @@ export const handleLogin = (e, email, password, role) => {
       return alert("Please fill all the fields");
     }
     // console.log("login", e, email, password, role);
-    store.dispatch(userLogin({ role, email, password }))
+    store.dispatch(userLogin({ role, email, password }));
   } catch (error) {
     console.log(error);
   }
@@ -33,31 +33,46 @@ export const handleRegister = (
 ) => {
   e.preventDefault();
   try {
+    // Check common fields
     if (
-      !email ||
-      !password ||
-      !role ||
-      !name ||
-      !organizationName ||
-      !hospitalName ||
-      !website ||
-      !address ||
-      !phone
+      !email.trim() ||
+      !password.trim() ||
+      !role.trim() ||
+      !website.trim() ||
+      !address.trim() ||
+      !phone.trim()
     ) {
       return alert("Please fill all the fields");
     }
-    console.log(
-      "Register",
-      e,
-      email,
-      password,
-      role,
-      name,
-      organizationName,
-      hospitalName,
-      website,
-      address,
-      phone
+
+    // Check role-specific fields
+    if (role === "admin" || role === "donor") {
+      if (!name.trim()) {
+        return alert("Please fill all the fields");
+      }
+    } else if (role === "organization") {
+      if (!organizationName.trim()) {
+        return alert("Please fill all the fields");
+      }
+    } else if (role === "hospital") {
+      if (!hospitalName.trim()) {
+        return alert("Please fill all the fields");
+      }
+    }
+
+    // Dispatch the register action
+    store.dispatch(
+      userRegister({
+        email,
+        password,
+        role,
+        name,
+        organizationName,
+        hospitalName,
+        website,
+        address,
+        phone,
+      })
     );
   } catch (error) {
     console.log(error);
