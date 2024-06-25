@@ -5,28 +5,51 @@ const jwt = require('jsonwebtoken');
 // registration controller call back
 const registerController = async (req, res) => {
     try {
-        const existingUser = await userModel.findOne({ email: req.body.email })
-        //validation
+        const { email, password, role, name, organizationName, hospitalName, website, address, phone } = req.body;
+
+        // Check if the email already exists
+        const existingUser = await userModel.findOne({ email });
         if (existingUser) {
             return res.status(400).send({
                 message: 'Email already exists',
                 success: false,
                 existingUser
-            })
+            });
         }
-        //password hash
-        const salt = await bcrypt.genSalt(10)
-        const hashPassword = await bcrypt.hash(req.body.password, salt)
-        req.body.password = hashPassword
 
-        //data saving
-        const user = new userModel(req.body)
-        await user.save()
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        // Construct user data based on the role
+        let userData = {
+            email,
+            password: hashPassword,
+            role,
+            website,
+            address,
+            phone
+        };
+
+        if (role === 'donor' || role === 'admin') {
+            userData.name = name;
+        }
+        if (role === 'organization') {
+            userData.organizationName = organizationName;
+        }
+        if (role === 'hospital') {
+            userData.hospitalName = hospitalName;
+        }
+
+        // Save the user
+        const user = new userModel(userData);
+        await user.save();
+
         return res.status(201).send({
             success: true,
             message: 'User Registered Successfully',
             user
-        })
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send({
