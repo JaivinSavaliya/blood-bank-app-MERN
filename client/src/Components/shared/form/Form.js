@@ -42,12 +42,12 @@ const Form = ({ formType, submitButton, formTitle }) => {
           <div className="form-check p-0">
             <input
               type="radio"
-              className="for-check-input"
+              className="form-check-input"
               name="role"
               id="donorRadio"
-              value={"donor"}
+              value="donor"
               onChange={(e) => setRole(e.target.value)}
-              defaultChecked
+              checked={role === "donor"}
             />
             <label htmlFor="donorRadio" className="form-check-label">
               Donor
@@ -57,12 +57,12 @@ const Form = ({ formType, submitButton, formTitle }) => {
           <div className="form-check ms-2">
             <input
               type="radio"
-              className="for-check-input"
+              className="form-check-input"
               name="role"
               id="adminRadio"
-              value={"admin"}
+              value="admin"
               onChange={(e) => setRole(e.target.value)}
-              defaultChecked
+              checked={role === "admin"}
             />
             <label htmlFor="adminRadio" className="form-check-label">
               Admin
@@ -72,11 +72,12 @@ const Form = ({ formType, submitButton, formTitle }) => {
           <div className="form-check ms-2">
             <input
               type="radio"
-              className="for-check-input"
+              className="form-check-input"
               name="role"
               id="hospitalRadio"
-              value={"hospital"}
+              value="hospital"
               onChange={(e) => setRole(e.target.value)}
+              checked={role === "hospital"}
             />
             <label htmlFor="hospitalRadio" className="form-check-label">
               Hospital
@@ -86,152 +87,110 @@ const Form = ({ formType, submitButton, formTitle }) => {
           <div className="form-check ms-2">
             <input
               type="radio"
-              className="for-check-input"
+              className="form-check-input"
               name="role"
               id="organizationRadio"
-              value={"organization"}
+              value="organization"
               onChange={(e) => setRole(e.target.value)}
+              checked={role === "organization"}
             />
             <label htmlFor="organizationRadio" className="form-check-label">
               Organization
             </label>
           </div>
         </div>
-        {(() => {
-          switch (true) {
-            case formType === "login": {
-              return (
-                <>
-                  <InputType
-                    labelText={"Your Email"}
-                    labelFor={"forEmail"}
-                    name={"email"}
-                    inputType={"email"}
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                  />
-                  <InputType
-                    labelText={"Your Password"}
-                    labelFor={"forPassword"}
-                    name={"password"}
-                    inputType={"password"}
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                  />
-                </>
-              );
-            }
 
-            case formType === "register": {
-              return (
-                <>
-                  {(role === "admin" || role === "donor") && (
-                    <InputType
-                      labelText={"Your Name"}
-                      labelFor={"forName"}
-                      name={"name"}
-                      inputType={"text"}
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value);
-                      }}
-                    />
-                  )}
+        {formType === "register" && (
+          <>
+            {(role === "admin" || role === "donor") && (
+              <InputType
+                labelText="Your Name"
+                labelFor="forName"
+                name="name"
+                inputType="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            )}
 
-                  {role === "organization" && (
-                    <InputType
-                      labelText={"Organization Name"}
-                      labelFor={"forOrganizationName"}
-                      name={"organizationName"}
-                      inputType={"text"}
-                      value={organizationName}
-                      onChange={(e) => {
-                        setOrganizationName(e.target.value);
-                      }}
-                    />
-                  )}
+            {role === "organization" && (
+              <InputType
+                labelText="Organization Name"
+                labelFor="forOrganizationName"
+                name="organizationName"
+                inputType="text"
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
+              />
+            )}
 
-                  {role === "hospital" && (
-                    <InputType
-                      labelText={"Hospital Name"}
-                      labelFor={"forHospitalName"}
-                      name={"hospitalName"}
-                      inputType={"text"}
-                      value={hospitalName}
-                      onChange={(e) => {
-                        setHospitalName(e.target.value);
-                      }}
-                    />
-                  )}
-                  <InputType
-                    labelText={"Your Email"}
-                    labelFor={"forEmail"}
-                    name={"email"}
-                    inputType={"email"}
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                  />
-                  <InputType
-                    labelText={"Your Password"}
-                    labelFor={"forPassword"}
-                    name={"password"}
-                    inputType={"password"}
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                  />
+            {role === "hospital" && (
+              <InputType
+                labelText="Hospital Name"
+                labelFor="forHospitalName"
+                name="hospitalName"
+                inputType="text"
+                value={hospitalName}
+                onChange={(e) => setHospitalName(e.target.value)}
+              />
+            )}
+          </>
+        )}
 
-                  <InputType
-                    labelText={"Website"}
-                    labelFor={"forWebsite"}
-                    name={"website"}
-                    inputType={"text"}
-                    value={website}
-                    onChange={(e) => {
-                      setWebsite(e.target.value);
-                    }}
-                  />
-                  <InputType
-                    labelText={"Address"}
-                    labelFor={"forAddress"}
-                    name={"address"}
-                    inputType={"text"}
-                    value={address}
-                    onChange={(e) => {
-                      setAddress(e.target.value);
-                    }}
-                  />
-                  <InputType
-                    labelText={"Phone"}
-                    labelFor={"forPhone"}
-                    name={"phone"}
-                    inputType={"text"}
-                    value={phone}
-                    onChange={(e) => {
-                      setPhone(e.target.value);
-                    }}
-                  />
-                </>
-              );
-            }
-          }
-        })()}
+        <InputType
+          labelText="Your Email"
+          labelFor="forEmail"
+          name="email"
+          inputType="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <InputType
+          labelText="Your Password"
+          labelFor="forPassword"
+          name="password"
+          inputType="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        
+        {formType === "register" && (
+          <>
+            <InputType
+              labelText="Website"
+              labelFor="forWebsite"
+              name="website"
+              inputType="text"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+            <InputType
+              labelText="Address"
+              labelFor="forAddress"
+              name="address"
+              inputType="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            <InputType
+              labelText="Phone"
+              labelFor="forPhone"
+              name="phone"
+              inputType="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </>
+        )}
 
         <div className="d-flex flex-row justify-content-between">
           {formType === "login" ? (
             <p>
-              Not Registered yet ?<Link to="/register"> Register </Link>
+              Not Registered yet? <Link to="/register">Register</Link>
             </p>
           ) : (
             <p>
-              Already a User ?<Link to="/login"> Login </Link>
+              Already a User? <Link to="/login">Login</Link>
             </p>
           )}
           <button className="btn btn-primary" type="submit">
